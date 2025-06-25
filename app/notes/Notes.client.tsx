@@ -9,8 +9,17 @@ import NoteModal from "@/components/NoteModal/NoteModal"
 import SearchBox from "@/components/SearchBox/SearchBox"
 import Pagination from "@/components/Pagination/Pagination"
 import NoteList from "@/components/NoteList/NoteList"
+import type { Note } from "@/types/note";
 
-export default function NotesCient() {
+interface FetchNotesResponse {
+    notes: Note[];
+    totalPages: number;
+}
+type NotesClientProps = {
+  initialData: FetchNotesResponse;
+};
+
+export default function NotesClient({initialData}:NotesClientProps) {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -24,6 +33,7 @@ export default function NotesCient() {
     queryKey: ['notesList', currentPage, debouncedSearchQuery],
     queryFn: () => fetchNotes({ page: currentPage, query: debouncedSearchQuery }),
     placeholderData: keepPreviousData,
+    initialData: currentPage === 1 && debouncedSearchQuery === "" ? initialData : undefined, 
   });
 
   const handleInputChange = (value: string) => {

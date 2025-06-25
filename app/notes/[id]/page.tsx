@@ -9,9 +9,10 @@ type Props = {
 const NoteDetails = async ({ params }: Props) => {
     const { id } = await params;
     const queryClient = new QueryClient;
+    const idNum = parseInt(id, 10);
     await queryClient.prefetchQuery({
         queryKey: ['note', id],
-        queryFn: () => fetchNoteById(id),
+        queryFn: () => fetchNoteById(idNum),
     })
     return (
      <HydrationBoundary state={dehydrate(queryClient)}>

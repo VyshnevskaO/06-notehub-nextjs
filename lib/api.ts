@@ -23,8 +23,10 @@ const API_KEY = process.env.NEXT_PUBLIC_NOTEHUB_TOKEN as string;
 
 export const fetchNotes = async ({ page, query }: FetchNotesProps): Promise<FetchNotesResponse> => {
     const url = new URL("https://notehub-public.goit.study/api/notes");
+
     url.searchParams.append("page", `${page}`);
     url.searchParams.append("perPage", "12");
+   
     if (query) {
       url.searchParams.append("search", query);
     }
@@ -58,7 +60,7 @@ export const createNote = async ({ title, content, tag }: CreateNoteProps): Prom
 };
 
 
-export const deleteNote = async (id: string): Promise<Note> => {
+export const deleteNote = async (id: number): Promise<Note> => {
   const res = await axios.delete<Note>(`https://notehub-public.goit.study/api/notes/${id}`, {
     headers: {
       Authorization: `Bearer ${API_KEY}`,
@@ -67,7 +69,7 @@ export const deleteNote = async (id: string): Promise<Note> => {
   return res.data;
 };
 
-export const fetchNoteById = async (id: string) => {
+export const fetchNoteById = async (id: number):Promise<Note> => {
   const res = await axios<Note>(`https://notehub-public.goit.study/api/notes/${id}`, {
     headers: {
       Authorization: `Bearer ${API_KEY}`,

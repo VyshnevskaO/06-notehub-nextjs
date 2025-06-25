@@ -5,6 +5,7 @@ import { deleteNote } from "@/lib/api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import Link from "next/link";
+import { useState } from "react";
 
 interface NoteListProps {
   notes: Note[];
@@ -12,8 +13,9 @@ interface NoteListProps {
 
 export default function NoteList({ notes }: NoteListProps) {
   const queryClient = useQueryClient();
+  const [deletingId, setDeletingId] = useState<number | null>(null);
 
-  const mutation = useMutation<Note, Error, string>({
+  const mutation = useMutation<Note, Error, number>({
     mutationFn: deleteNote,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['notesList'] }); 
@@ -23,8 +25,13 @@ export default function NoteList({ notes }: NoteListProps) {
     },
   });
 
-  const handleDelete = (id: string) => {
-    mutation.mutate(id);
+  const handleDelete = (id: number) => {
+    setDeletingId(id);
+    mutation.mutate(id, {
+      onSettled: () => {
+        setDeletingId(null);
+      }
+    });
   };
 
   
@@ -39,7 +46,7 @@ export default function NoteList({ notes }: NoteListProps) {
         <Link  href={`/notes/${note.id}`} className={css.button}>
          View details
         </Link>
-          <button className={css.button} onClick={() => handleDelete(note.id)}>Delete</button>
+          <button className={css.button} onClick={() => handleDelete(note.id)} disabled={deletingId === note.id}>Delete</button>
       </div>
     </li>
       ))}

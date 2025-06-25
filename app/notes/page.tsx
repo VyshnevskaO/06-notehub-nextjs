@@ -1,13 +1,13 @@
 import css from "./NotesPage.module.css"
-import NotesCient from "./Notes.client"
+import NotesClient from "./Notes.client"
+import { fetchNotes } from "@/lib/api"
 
-export default function Home() {
-
-  
+export default async function Home() {
+    const notes = await fetchNotes({ page: 1 });
 
   return (
     <div className={css.app}>
-      <NotesCient/>
+      <NotesClient initialData={notes} />
     </div>
   )
 }

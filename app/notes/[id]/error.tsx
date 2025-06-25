@@ -3,7 +3,7 @@
 type Props  = {
     error:Error
 }
-export default function Error({error}:Props) {
-    return <p>Could not fetch note details. {error.message}</p>
+export default function NoteError({error}:Props) {
+    return <p className="error-message">Could not fetch note details. {error.message}</p>
   }
 

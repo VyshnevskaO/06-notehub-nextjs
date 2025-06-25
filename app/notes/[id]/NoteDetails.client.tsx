@@ -5,10 +5,11 @@ import { useQuery } from "@tanstack/react-query";
 import { fetchNoteById } from "@/lib/api";
 
 export default function NoteDetailsClient() {
-    const { id } = useParams<{ id: string }>();
+  const { id } = useParams<{ id: string }>();
+  const idNum = parseInt(id, 10);
     const { data: note, isLoading, error } = useQuery({
         queryKey: ['note', id],
-        queryFn: () => fetchNoteById(id),
+        queryFn: () => fetchNoteById(idNum),
         refetchOnMount: false,
     
     })
