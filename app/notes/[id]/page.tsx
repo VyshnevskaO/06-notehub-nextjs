@@ -8,10 +8,10 @@ type Props = {
  
 const NoteDetails = async ({ params }: Props) => {
     const { id } = await params;
-    const queryClient = new QueryClient;
+    const queryClient = new QueryClient();
     const idNum = parseInt(id, 10);
     await queryClient.prefetchQuery({
-        queryKey: ['note', id],
+        queryKey: ['note', idNum],
         queryFn: () => fetchNoteById(idNum),
     })
     return (
@@ -21,8 +21,6 @@ const NoteDetails = async ({ params }: Props) => {
         
     )
 };
-
-  
 
 
     export default  NoteDetails
